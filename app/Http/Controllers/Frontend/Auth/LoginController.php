@@ -105,6 +105,7 @@ class LoginController extends Controller
             'email' => $profile->profile->emails[0]->handle,
             'phones' => $profile->profile->phones[0]->number,
             'country_code' => $profile->profile->intl,
+            'image' => $profile->profile->image->imageUrl,
         ];
 
         dd($r);
