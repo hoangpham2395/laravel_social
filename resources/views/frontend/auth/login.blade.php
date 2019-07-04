@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Log in</title>
+    <title>Laravel Social</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -64,6 +64,9 @@
             <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a>
             <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using Google+</a>
             <a href="{{asset('login/redirect/ya')}}" class="btn btn-block btn-social btn-yahoo btn-flat" style="background-color: #3b16a5;"><i class="fa fa-yahoo"></i> Sign in using Yahoo</a>
+            <a href="{{asset('login/redirect/line')}}" class="btn btn-block btn-social btn-line btn-flat" style="background-color: #00B900; color: #fff">
+                <i class="fa"><img src="{{asset('images/logo/line.png')}}" style="width: 31px; margin-top: -6px;"></i> Sign in using Line
+            </a>
         </div>
         <!-- /.social-auth-links -->
 

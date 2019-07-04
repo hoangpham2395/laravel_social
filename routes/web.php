@@ -18,3 +18,6 @@ Route::get('/', [
 
 Route::get('login/redirect/ya', 'Frontend\Auth\LoginController@yahooRedirect');
 Route::get('login/callback/ya', 'Frontend\Auth\LoginController@yahooCallback');
+
+Route::get('login/redirect/line', 'Frontend\Auth\LoginController@lineRedirect');
+Route::get('login/callback/line', 'Frontend\Auth\LoginController@lineCallback');
