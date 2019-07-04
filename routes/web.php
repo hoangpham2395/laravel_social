@@ -13,8 +13,8 @@
 
 Route::get('/', [
     'as' => 'login.index',
-    'uses' => 'Auth\LoginController@index'
+    'uses' => 'Frontend\Auth\LoginController@index'
 ]);
 
-Route::get('login/redirect/ya', 'Auth\LoginController@yahooRedirect');
-Route::get('login/callback/ya', 'Auth\LoginController@yahooCallback');
+Route::get('login/redirect/ya', 'Frontend\Auth\LoginController@yahooRedirect');
+Route::get('login/callback/ya', 'Frontend\Auth\LoginController@yahooCallback');

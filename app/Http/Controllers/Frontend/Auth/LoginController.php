@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\ClientException;
@@ -41,7 +41,7 @@ class LoginController extends Controller
 
     public function index()
     {
-        return view('login.index');
+        return view('frontend.auth.login');
     }
 
     public function yahooRedirect()
@@ -56,7 +56,7 @@ class LoginController extends Controller
         $url = getConstant('YAHOO_API_GET_TOKEN');
         $option = [
             'headers' => [
-                'Authorization' => 'Basic ' . base64_encode(getConstant('YAHOO_CLIENT_ID') . getConstant('YAHOO_CLIENT_SECRET')),
+                'Authorization' => 'Basic ' . base64_encode(getConstant('YAHOO_CLIENT_ID') . ":" . getConstant('YAHOO_CLIENT_SECRET')),
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => [
@@ -68,7 +68,32 @@ class LoginController extends Controller
             ],
         ];
 
-        dd($this->callApi($url, $option));
+        $tokens = json_decode($this->callApi($url, $option));
+
+        $optionExchange = [
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode(getConstant('YAHOO_CLIENT_ID') . ":" . getConstant('YAHOO_CLIENT_SECRET')),
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => [
+                'client_id' => getConstant('YAHOO_CLIENT_ID'),
+                'client_secret' => getConstant('YAHOO_CLIENT_SECRET'),
+                'redirect_uri' => getConstant('YAHOO_URI_CALLBACK'),
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $tokens->refresh_token,
+            ],
+        ];
+
+        $tokensExchange = json_decode($this->callApi($url, $optionExchange));
+
+        $urlProfile = "https://social.yahooapis.com/v1/user/". $tokensExchange->xoauth_yahoo_guid ."/profile?format=json";
+        $optionProfile = [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $tokensExchange->access_token,
+            ],
+        ];
+
+        dd(json_decode($this->callApi($urlProfile, $optionProfile, "GET")));
     }
 
     public function callApi($url, $option = [], $method = "POST")
