@@ -93,7 +93,21 @@ class LoginController extends Controller
             ],
         ];
 
-        dd(json_decode($this->callApi($urlProfile, $optionProfile, "GET")));
+        $profile = json_decode($this->callApi($urlProfile, $optionProfile, "GET"));
+        // Error
+        if (empty($profile->profile)) {
+            dd($profile);
+        }
+
+        $r = [
+            'profile_id' => $profile->profile->guid,
+            'name' => $profile->profile->givenName . ' ' . $profile->profile->familyName,
+            'email' => $profile->profile->emails[0]->handle,
+            'phones' => $profile->profile->phones[0]->number,
+            'country_code' => $profile->profile->intl,
+        ];
+
+        dd($r);
     }
 
     public function callApi($url, $option = [], $method = "POST")
