@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Frontend\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Base\BaseController;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
-class LoginController extends Controller
+class LoginController extends BaseController
 {
     /*
     |--------------------------------------------------------------------------
