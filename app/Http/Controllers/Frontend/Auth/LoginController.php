@@ -53,39 +53,48 @@ class LoginController extends BaseController
     {
         $data = $request->all();
 
+        // Yahoo developer
         $url = getConstant('YAHOO_API_GET_TOKEN');
+        $clientId = getConstant('YAHOO_CLIENT_ID');
+        $clientSecret = getConstant('YAHOO_CLIENT_SECRET');
+        $returnUri = getConstant('YAHOO_URI_CALLBACK');
+        $authorization = 'Basic ' . base64_encode($clientId . ":" . $clientSecret);
+
+        // Call api get token
         $option = [
             'headers' => [
-                'Authorization' => 'Basic ' . base64_encode(getConstant('YAHOO_CLIENT_ID') . ":" . getConstant('YAHOO_CLIENT_SECRET')),
+                'Authorization' => $authorization,
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => [
-                'client_id' => getConstant('YAHOO_CLIENT_ID'),
-                'client_secret' => getConstant('YAHOO_CLIENT_SECRET'),
-                'redirect_uri' => getConstant('YAHOO_URI_CALLBACK'),
+                'client_id' => $clientId,
+                'client_secret' => $clientSecret,
+                'redirect_uri' => $returnUri,
                 'grant_type' => 'authorization_code',
                 'code' => array_get($data, 'code'),
             ],
         ];
 
-        $tokens = json_decode($this->callApi($url, $option));
+        $tokens = $this->callApi($url, $option);
 
+        // Call api get token exchange
         $optionExchange = [
             'headers' => [
-                'Authorization' => 'Basic ' . base64_encode(getConstant('YAHOO_CLIENT_ID') . ":" . getConstant('YAHOO_CLIENT_SECRET')),
+                'Authorization' => $authorization,
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'form_params' => [
-                'client_id' => getConstant('YAHOO_CLIENT_ID'),
-                'client_secret' => getConstant('YAHOO_CLIENT_SECRET'),
-                'redirect_uri' => getConstant('YAHOO_URI_CALLBACK'),
+                'client_id' => $clientId,
+                'client_secret' => $clientSecret,
+                'redirect_uri' => $returnUri,
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $tokens->refresh_token,
             ],
         ];
 
-        $tokensExchange = json_decode($this->callApi($url, $optionExchange));
+        $tokensExchange = $this->callApi($url, $optionExchange);
 
+        // Call api get profile
         $urlProfile = "https://social.yahooapis.com/v1/user/". $tokensExchange->xoauth_yahoo_guid ."/profile?format=json";
         $optionProfile = [
             'headers' => [
@@ -93,19 +102,21 @@ class LoginController extends BaseController
             ],
         ];
 
-        $profile = json_decode($this->callApi($urlProfile, $optionProfile, "GET"));
+        $profile = $this->callApi($urlProfile, $optionProfile, "GET");
         // Error
         if (empty($profile->profile)) {
             dd($profile);
         }
 
+        // Get profile
         $r = [
             'profile_id' => $profile->profile->guid,
             'name' => $profile->profile->givenName . ' ' . $profile->profile->familyName,
             'email' => $profile->profile->emails[0]->handle,
-            'phones' => $profile->profile->phones[0]->number,
+            'phone' => $profile->profile->phones[0]->number,
             'country_code' => $profile->profile->intl,
             'image' => $profile->profile->image->imageUrl,
+            'access_token' => $tokensExchange->access_token,
         ];
 
         dd($r);
@@ -117,7 +128,7 @@ class LoginController extends BaseController
             $client = new \GuzzleHttp\Client();
             $response = $client->request($method, $url, $option);
 
-            return $response->getBody()->getContents();
+            return json_decode($response->getBody()->getContents());
         } catch (ClientException $e) {
             return $e->getMessage();
         }
