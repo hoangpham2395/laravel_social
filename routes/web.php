@@ -11,10 +11,17 @@
 |
 */
 
-Route::get('/', [
+Route::get('/', 'Frontend\Auth\LoginController@getLogin');
+
+Route::get('/login', [
     'as' => 'login.index',
-    'uses' => 'Frontend\Auth\LoginController@index'
+    'uses' => 'Frontend\Auth\LoginController@getLogin'
 ]);
+
+Route::get('login/redirect/{social}', 'Frontend\Auth\LoginController@redirect');
+
+Route::get('login/callback/facebook', 'Frontend\Auth\LoginController@facebookCallback');
+Route::get('login/callback/google', 'Frontend\Auth\LoginController@googleCallback');
 
 Route::get('login/redirect/ya', 'Frontend\Auth\LoginController@yahooRedirect');
 Route::get('login/callback/ya', 'Frontend\Auth\LoginController@yahooCallback');

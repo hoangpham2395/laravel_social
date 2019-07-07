@@ -46,6 +46,11 @@ composer require doctrine/dbal
 composer require guzzlehttp/guzzle
 ```
 
+* Install Socialite
+```bash
+composer require laravel/socialite
+```
+
 * Run migration
 ```bash
 php artisan migrate

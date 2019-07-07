@@ -6,6 +6,7 @@ use App\Http\Controllers\Base\BaseController;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Socialite;
 
 class LoginController extends BaseController
 {
@@ -39,9 +40,38 @@ class LoginController extends BaseController
         $this->middleware('guest')->except('logout');
     }
 
-    public function index()
+    public function getLogin()
     {
         return view('frontend.auth.login');
+    }
+
+    public function postLogin() 
+    {
+
+    }
+
+    public function logout() 
+    {
+
+    }
+
+    public function redirect($social) 
+    {
+        try {
+            return Socialite::driver($social)->redirect();
+        } catch (Exception $e) {
+
+        }
+    }
+
+    public function facebookCallback() 
+    {
+        try {
+            $user = Socialite::driver('facebook')->user();
+            dd($user);
+        } catch (Exception $e) {
+            
+        }
     }
 
     public function yahooRedirect()
