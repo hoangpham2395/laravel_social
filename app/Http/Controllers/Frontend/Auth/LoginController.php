@@ -6,7 +6,8 @@ use App\Http\Controllers\Base\BaseController;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Socialite;
+use Illuminate\Support\Facades\Input;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends BaseController
 {
@@ -59,7 +60,7 @@ class LoginController extends BaseController
     {
         try {
             return Socialite::driver($social)->redirect();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
         }
     }
@@ -67,9 +68,25 @@ class LoginController extends BaseController
     public function facebookCallback() 
     {
         try {
+            $params = Input::all();
+            // Error
+            if (!empty($params['error_code'])) {
+                dd($params);
+            }
+
+            // Success
             $user = Socialite::driver('facebook')->user();
-            dd($user);
-        } catch (Exception $e) {
+
+            $r = [
+                'profile_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'image' => $user->avatar_original,
+                'access_token' => $user->token,
+            ];
+
+            dd($r);
+        } catch (\Exception $e) {
             
         }
     }
