@@ -25,6 +25,10 @@ Route::get('login/callback/ya', 'Frontend\Auth\LoginController@yahooCallback');
 Route::get('login/redirect/line', 'Frontend\Auth\LoginController@lineRedirect');
 Route::get('login/callback/line', 'Frontend\Auth\LoginController@lineCallback');
 
-// Socialite
+// Api zalo
+Route::get('login/redirect/zalo', 'Frontend\Auth\LoginController@zaloRedirect');
+Route::get('login/callback/zalo', 'Frontend\Auth\LoginController@zaloCallback');
+
+// Socialite: facebook, google
 Route::get('login/redirect/{social}', 'Frontend\Auth\LoginController@redirect');
 Route::get('login/callback/{social}', 'Frontend\Auth\LoginController@callback');

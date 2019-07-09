@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Laravel\Socialite\Facades\Socialite;
 
+/**
+ * Class LoginController
+ * @package App\Http\Controllers\Frontend\Auth
+ */
 class LoginController extends BaseController
 {
     /*
@@ -41,22 +45,31 @@ class LoginController extends BaseController
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getLogin()
     {
         return view('frontend.auth.login');
     }
 
-    public function postLogin() 
+    public function postLogin()
     {
 
     }
 
-    public function logout() 
+    public function logout()
     {
 
     }
 
-    public function redirect($social) 
+
+    /**
+     * Login by socialite (facebook, google, twitter, github)
+     * @param $social
+     * @return mixed
+     */
+    public function redirect($social)
     {
         try {
             return Socialite::driver($social)->redirect();
@@ -65,6 +78,9 @@ class LoginController extends BaseController
         }
     }
 
+    /**
+     * @param $social
+     */
     public function callback($social)
     {
         try {
@@ -91,11 +107,18 @@ class LoginController extends BaseController
         }
     }
 
+    /**
+     * Login by yahoo
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function yahooRedirect()
     {
         return redirect(getConstant('YAHOO_API_REQUEST_AUTH'));
     }
 
+    /**
+     * @param Request $request
+     */
     public function yahooCallback(Request $request)
     {
         $data = $request->all();
@@ -169,6 +192,40 @@ class LoginController extends BaseController
         dd($r);
     }
 
+    /**
+     * Login by zalo
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function zaloRedirect()
+    {
+        return redirect(getConstant('ZALO_API_REQUEST_AUTH'));
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function zaloCallback(Request $request)
+    {
+        $data = $request->all();
+        $profileId = array_get($data, 'uid');
+        $code = array_get($data, 'code');
+
+        $urlGetToken = 'https://oauth.zaloapp.com/v3/access_token?app_id='. getConstant('ZALO_CLIENT_ID') .'&app_secret='. getConstant('ZALO_CLIENT_SECRET') .'&code='. $code;
+        $tokens = $this->callApi($urlGetToken, [], "GET");
+
+        $urlGetProfile = 'https://graph.zalo.me/v2.0/me?access_token='. $tokens->access_token;
+        $profile = $this->callApi($urlGetProfile, [], 'GET');
+
+        dd($profile);
+    }
+
+    /**
+     * @param $url
+     * @param array $option
+     * @param string $method
+     * @return mixed|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function callApi($url, $option = [], $method = "POST")
     {
         try {

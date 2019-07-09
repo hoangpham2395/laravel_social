@@ -67,6 +67,9 @@
             <a href="{{asset('login/redirect/line')}}" class="btn btn-block btn-social btn-line btn-flat" style="background-color: #00B900; color: #fff">
                 <i class="fa"><img src="{{asset('images/logo/line.png')}}" style="width: 31px; margin-top: -6px;"></i> Sign in using Line
             </a>
+            <a href="{{asset('login/redirect/zalo')}}" class="btn btn-block btn-social btn-line btn-flat" style="background-color: #0573ff; color: #fff">
+                <i class="fa"><img src="{{asset('images/logo/zalo.png')}}" style="width: 31px; margin-top: -6px;"></i> Sign in using Zalo
+            </a>
         </div>
         <!-- /.social-auth-links -->
 
