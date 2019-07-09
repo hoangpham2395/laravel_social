@@ -74,7 +74,7 @@ class LoginController extends BaseController
         try {
             return Socialite::driver($social)->redirect();
         } catch (\Exception $e) {
-
+            dd($e->getMessage());
         }
     }
 
@@ -97,13 +97,13 @@ class LoginController extends BaseController
                 'profile_id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'image' => $user->avatar_original,
+                'image' => $user->avatar,
                 'access_token' => $user->token,
             ];
 
             dd($r);
         } catch (\Exception $e) {
-            
+            dd($e->getMessage());
         }
     }
 

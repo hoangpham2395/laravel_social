@@ -63,6 +63,7 @@
             <p>- OR -</p>
             <a href="{{asset('login/redirect/facebook')}}" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a>
             <a href="{{asset('login/redirect/google')}}" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using Google+</a>
+            <a href="{{asset('login/redirect/github')}}" class="btn btn-block btn-social btn-github btn-flat"><i class="fa fa-github"></i> Sign in using Github</a>
             <a href="{{asset('login/redirect/ya')}}" class="btn btn-block btn-social btn-yahoo btn-flat" style="background-color: #3b16a5;"><i class="fa fa-yahoo"></i> Sign in using Yahoo</a>
             <a href="{{asset('login/redirect/line')}}" class="btn btn-block btn-social btn-line btn-flat" style="background-color: #00B900; color: #fff">
                 <i class="fa"><img src="{{asset('images/logo/line.png')}}" style="width: 31px; margin-top: -6px;"></i> Sign in using Line
