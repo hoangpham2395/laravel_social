@@ -65,7 +65,7 @@ class LoginController extends BaseController
         }
     }
 
-    public function facebookCallback() 
+    public function callback($social)
     {
         try {
             $params = Input::all();
@@ -75,7 +75,7 @@ class LoginController extends BaseController
             }
 
             // Success
-            $user = Socialite::driver('facebook')->user();
+            $user = Socialite::driver($social)->user();
 
             $r = [
                 'profile_id' => $user->id,
