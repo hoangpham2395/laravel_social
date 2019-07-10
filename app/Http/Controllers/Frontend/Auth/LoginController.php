@@ -147,28 +147,28 @@ class LoginController extends BaseController
 
         $tokens = $this->callApi($url, $option);
 
-        // Call api get token exchange
-        $optionExchange = [
-            'headers' => [
-                'Authorization' => $authorization,
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            'form_params' => [
-                'client_id' => $clientId,
-                'client_secret' => $clientSecret,
-                'redirect_uri' => $returnUri,
-                'grant_type' => 'refresh_token',
-                'refresh_token' => $tokens->refresh_token,
-            ],
-        ];
-
-        $tokensExchange = $this->callApi($url, $optionExchange);
+        // Call api get token exchange (Khi access_token thì dùng refesh_token để tạo access_token mới)
+//        $optionExchange = [
+//            'headers' => [
+//                'Authorization' => $authorization,
+//                'Content-Type' => 'application/x-www-form-urlencoded',
+//            ],
+//            'form_params' => [
+//                'client_id' => $clientId,
+//                'client_secret' => $clientSecret,
+//                'redirect_uri' => $returnUri,
+//                'grant_type' => 'refresh_token',
+//                'refresh_token' => $tokens->refresh_token,
+//            ],
+//        ];
+//
+//        $tokensExchange = $this->callApi($url, $optionExchange);
 
         // Call api get profile
-        $urlProfile = "https://social.yahooapis.com/v1/user/". $tokensExchange->xoauth_yahoo_guid ."/profile?format=json";
+        $urlProfile = "https://social.yahooapis.com/v1/user/". $tokens->xoauth_yahoo_guid ."/profile?format=json";
         $optionProfile = [
             'headers' => [
-                'Authorization' => 'Bearer ' . $tokensExchange->access_token,
+                'Authorization' => 'Bearer ' . $tokens->access_token,
             ],
         ];
 
@@ -186,7 +186,7 @@ class LoginController extends BaseController
             'phone' => $profile->profile->phones[0]->number,
             'country_code' => $profile->profile->intl,
             'image' => $profile->profile->image->imageUrl,
-            'access_token' => $tokensExchange->access_token,
+            'access_token' => $tokens->access_token,
         ];
 
         dd($r);
