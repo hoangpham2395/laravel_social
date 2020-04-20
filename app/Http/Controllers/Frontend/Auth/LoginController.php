@@ -141,11 +141,14 @@ class LoginController extends BaseController
                 'client_secret' => $clientSecret,
                 'redirect_uri' => $returnUri,
                 'grant_type' => 'authorization_code',
-                'code' => array_get($data, 'code'),
+                'code' => data_get($data, 'code'),
             ],
         ];
 
         $tokens = $this->callApi($url, $option);
+        if (empty(data_get($tokens, 'xoauth_yahoo_guid'))) {
+            dd('Login yahoo is failed. Did not get token, try again with other code!');
+        }
 
         // Call api get token exchange (Khi access_token thì dùng refesh_token để tạo access_token mới)
 //        $optionExchange = [
@@ -180,13 +183,13 @@ class LoginController extends BaseController
 
         // Get profile
         $r = [
-            'profile_id' => $profile->profile->guid,
-            'name' => $profile->profile->givenName . ' ' . $profile->profile->familyName,
-            'email' => $profile->profile->emails[0]->handle,
-            'phone' => $profile->profile->phones[0]->number,
-            'country_code' => $profile->profile->intl,
-            'image' => $profile->profile->image->imageUrl,
-            'access_token' => $tokens->access_token,
+            'profile_id' => data_get($profile, 'profile.guid'),
+            'name' => data_get($profile, 'profile.givenName') . ' ' . data_get($profile, 'profile.familyName'),
+            'email' => data_get($profile, 'profile.emails.0.handle'),
+            'phone' => data_get($profile, 'profile.phones.0.number'),
+            'country_code' => data_get($profile,'profile.intl'),
+            'image' => data_get($profile, 'profile.image.imageUrl'),
+            'access_token' => data_get($tokens, 'access_token'),
         ];
 
         dd($r);
