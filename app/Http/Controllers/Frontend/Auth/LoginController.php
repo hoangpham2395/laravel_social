@@ -118,6 +118,7 @@ class LoginController extends BaseController
 
     /**
      * @param Request $request
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function yahooCallback(Request $request)
     {
@@ -165,6 +166,10 @@ class LoginController extends BaseController
 //        $tokensExchange = $this->callApi($url, $optionExchange);
 
         // Call api get profile
+        if (empty(data_get($tokens, 'xoauth_yahoo_guid'))) {
+            dd('Do not get token');
+        }
+
         $urlProfile = "https://social.yahooapis.com/v1/user/". $tokens->xoauth_yahoo_guid ."/profile?format=json";
         $optionProfile = [
             'headers' => [
@@ -180,13 +185,12 @@ class LoginController extends BaseController
 
         // Get profile
         $r = [
-            'profile_id' => $profile->profile->guid,
-            'name' => $profile->profile->givenName . ' ' . $profile->profile->familyName,
-            'email' => $profile->profile->emails[0]->handle,
-            'phone' => $profile->profile->phones[0]->number,
-            'country_code' => $profile->profile->intl,
-            'image' => $profile->profile->image->imageUrl,
-            'access_token' => $tokens->access_token,
+            'profile_id' => data_get($profile, 'profile.guid'),
+            'name' => data_get($profile, 'profile.givenName') . ' ' . data_get($profile, 'profile.familyName'),
+            'email' => data_get($profile, 'profile.emails.0.handle'),
+            'phone' => data_get($profile, 'profile.phones.0.number'),
+            'image' => data_get($profile, 'profile.image.imageUrl'),
+            'access_token' => data_get($tokens, 'access_token'),
         ];
 
         dd($r);
@@ -203,6 +207,7 @@ class LoginController extends BaseController
 
     /**
      * @param Request $request
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function zaloCallback(Request $request)
     {
