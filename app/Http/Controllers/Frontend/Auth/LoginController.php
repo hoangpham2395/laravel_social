@@ -169,10 +169,6 @@ class LoginController extends BaseController
 //        $tokensExchange = $this->callApi($url, $optionExchange);
 
         // Call api get profile
-        if (empty(data_get($tokens, 'xoauth_yahoo_guid'))) {
-            dd('Do not get token');
-        }
-
         $urlProfile = "https://social.yahooapis.com/v1/user/". $tokens->xoauth_yahoo_guid ."/profile?format=json";
         $optionProfile = [
             'headers' => [
