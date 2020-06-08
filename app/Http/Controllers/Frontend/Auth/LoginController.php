@@ -142,11 +142,14 @@ class LoginController extends BaseController
                 'client_secret' => $clientSecret,
                 'redirect_uri' => $returnUri,
                 'grant_type' => 'authorization_code',
-                'code' => array_get($data, 'code'),
+                'code' => data_get($data, 'code'),
             ],
         ];
 
         $tokens = $this->callApi($url, $option);
+        if (empty(data_get($tokens, 'xoauth_yahoo_guid'))) {
+            dd('Login yahoo is failed. Did not get token, try again with other code!');
+        }
 
         // Call api get token exchange (Khi access_token thì dùng refesh_token để tạo access_token mới)
 //        $optionExchange = [
