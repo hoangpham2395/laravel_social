@@ -211,16 +211,24 @@ class LoginController extends BaseController
     public function zaloCallback(Request $request)
     {
         $data = $request->all();
-        $profileId = array_get($data, 'uid');
-        $code = array_get($data, 'code');
+        $profileId = data_get($data, 'uid');
+        $code = data_get($data, 'code');
 
         $urlGetToken = 'https://oauth.zaloapp.com/v3/access_token?app_id='. getConstant('ZALO_CLIENT_ID') .'&app_secret='. getConstant('ZALO_CLIENT_SECRET') .'&code='. $code;
         $tokens = $this->callApi($urlGetToken, [], "GET");
 
-        $urlGetProfile = 'https://graph.zalo.me/v2.0/me?access_token='. $tokens->access_token;
+        $urlGetProfile = 'https://graph.zalo.me/v2.0/me?access_token='. $tokens->access_token . '&fields=id,birthday,name,gender,picture';
         $profile = $this->callApi($urlGetProfile, [], 'GET');
 
-        dd($profile);
+        $data = [
+            'id' => data_get($profile, 'id'),
+            'name' => data_get($profile, 'name'),
+            'gender' => data_get($profile, 'gender'),
+            'birthday' => data_get($profile, 'birthday'),
+            'image' => data_get($profile, 'picture.data.url'),
+        ];
+
+        dd($data);
     }
 
     /**
