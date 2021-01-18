@@ -12,4 +12,10 @@ return [
     'ZALO_CLIENT_SECRET' => env('ZALO_CLIENT_SECRET'),
     'ZALO_URI_CALLBACK' => env('ZALO_URI_CALLBACK'),
     'ZALO_API_REQUEST_AUTH' => 'https://oauth.zaloapp.com/v3/auth?app_id='.env('ZALO_CLIENT_ID').'&redirect_uri='.env('ZALO_URI_CALLBACK').'&state=',
+
+    // Line
+    'LINE_USER_ID' => env('LINE_USER_ID'),
+    'LINE_CHANNEL_ID' => env('LINE_CHANNEL_ID'),
+    'LINE_CHANNEL_SECRET' => env('LINE_CHANNEL_SECRET'),
+    'LINE_URI_CALLBACK' => env('LINE_URI_CALLBACK'),
 ];

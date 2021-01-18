@@ -231,6 +231,16 @@ class LoginController extends BaseController
         dd($data);
     }
 
+    public function lineRedirect()
+    {
+
+    }
+
+    public function lineCallback(Request $request)
+    {
+
+    }
+
     /**
      * @param $url
      * @param array $option
